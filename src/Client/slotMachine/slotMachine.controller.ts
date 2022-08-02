@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { slotMachineService } from './slotMachine.service';
 
-@ApiTags("술 추천 페이지")
+@ApiTags("술롯머신")
 @Controller('slotMachine')
 export class slotMachineController {
   constructor(private readonly slotMachineService: slotMachineService) { }

@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AlcoholService } from './alcohol.service';
 import { Alcohol } from '../../Entity/Alcohol/alcohol.entity';
 
-@Controller('alcohol')
+@ApiTags("술 소개 페이지 (admin - 지울 예정 ??)")
+@Controller('alcoholAdmin')
 export class AlcoholController {
     constructor(private readonly alcoholService: AlcoholService) { }
 

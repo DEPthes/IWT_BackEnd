@@ -1,34 +1,63 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiCreatedResponse, ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Alcohol } from 'src/Entity/Alcohol/alcohol.entity';
 import { IntroductionAlcoholService } from './introductionAlcohol.service';
 
 @ApiTags("술 소개 페이지")
 @Controller('alcohol')
 export class IntroductionAlcoholController {
-  constructor(private readonly alcoholService: IntroductionAlcoholService) {}
- 
-    // 술 리스트 조회
-    @Get()
-    @ApiOperation({ summary: '술 리스트 조회 API', description: '술 리스트 조회' })
-    @ApiCreatedResponse({ description: '술 리스트 조회', type: Alcohol })
-    getAlcoholList(@Body('filter') filter: string): Promise<Alcohol[]> {
-        return this.alcoholService.getAlcoholList(filter);
-    }
+    constructor(private readonly alcoholService: IntroductionAlcoholService) { }
 
-    // 술 카테고리 별 리스트 조회
-    @Get('/:category')
-    @ApiOperation({ summary: '술 리스트 조회 API', description: '술 리스트 조회' })
-    @ApiCreatedResponse({ description: '술 리스트 조회', type: Alcohol })
-    getAlcoholListByCategory(@Param('category') category: number, @Body('filter') filter: string): Promise<Alcohol[]> {
-        return this.alcoholService.getAlcoholListByCategory(category, filter);
-    }
-
-    // 개별 술 조회
+    // id로 술 조회
     @Get('/:id')
     @ApiOperation({ summary: 'id로 술 조회 API', description: 'id로 술 조회. /alcohol/1' })
     @ApiCreatedResponse({ description: 'id로 술 조회', type: Alcohol })
     getAlcoholById(@Param('id') id: number): Promise<Alcohol> {
         return this.alcoholService.getAlcoholById(id);
+    }
+
+    // 이름으로 술 조회
+    @Post()
+    @ApiBody({
+        schema: {
+          properties: {
+            alcoholName: { type: "string" }
+          }
+        }
+      })
+    @ApiOperation({ summary: '이름으로 술 조회 API', description: '이름으로 술 조회' })
+    @ApiCreatedResponse({ description: '이름으로 술 조회', type: Alcohol })
+    getAlcoholByName(@Body('alcoholName') alcoholName: string): Promise<Alcohol> {
+        return this.alcoholService.getAlcoholByName(alcoholName);
+    }
+
+    // 술 카테고리 별 리스트 조회
+    @Post('/list/:category')
+    @ApiBody({
+        schema: {
+          properties: {
+            filter: { type: "string" }
+          }
+        }
+      })
+    @ApiOperation({ summary: '술 카테고리 별 리스트 조회 API', description: '술 카테고리 별 리스트 조회' })
+    @ApiCreatedResponse({ description: '술 카테고리 별 리스트 조회', type: Alcohol })
+    getAlcoholListByCategory(@Param('category') category: number, @Body('filter') filter: string): Promise<Alcohol[]> {
+        return this.alcoholService.getAlcoholListByCategory(category, filter);
+    }
+
+    // 술 리스트 조회
+    @Post('/list')
+    @ApiBody({
+        schema: {
+          properties: {
+            filter: { type: "string" }
+          }
+        }
+      })
+    @ApiOperation({ summary: '술 리스트 조회 API', description: '술 리스트 조회' })
+    @ApiCreatedResponse({ description: '술 리스트 조회', type: Alcohol })
+    getAlcoholList(@Body('filter') filter: string): Promise<Alcohol[]> {
+        return this.alcoholService.getAlcoholList(filter);
     }
 }
